@@ -1,4 +1,3 @@
 TO DO:
-- Rewrite comparison as function
-- Implement optional search for mutations (inversion of search algorithm)
-- Implement optional search for specific sequences
+- Implement optional search for mutations (inversion of search algorithm, comp_mode = 2)
+- Implement optional search for specific sequences (comp_mode = 3)

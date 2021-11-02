@@ -14,37 +14,58 @@ seq2_acids = seq2.split()[posSeq:]
 seq1_acids_merged = ''.join(seq1_acids[:])
 seq2_acids_merged = ''.join(seq2_acids[:])
 
-############################
-## Input range to compare ##
-############################
+################################################
+## Input range to compare and comparison mode ##
+################################################
 n_acids = len(seq1_acids_merged)  # Amount of amino acids
-print("Length of sequence: ", n_acids)
+print("\nLength of sequence: ", n_acids)
 print("Input starting position for comparison:")
 comp_start = int(input())
 print("Input ending position for comparison:")
 comp_end = int(input())
-print("Start set to:\n", comp_start, "\n" "End set to:\n", comp_end)
+print("Start set to:", comp_start, "\n" "End set to:", comp_end)
+n_acids_interval = range(comp_start, comp_end)  # Interval for search
+
+
+###########################
+## Input comparison mode ##
+###########################
+print("\nAvailable comparison modes:\n",
+      "(1) Search for matching nucleotides / amino acids\n",
+      "(2) Search for mutated nucleosides / amino acids\n",
+      "(3) Search for specific nucleoside / amino acid sequence\n",
+      "Input 1,2 or 3:")
+comp_mode = int(input())
+
 
 ##########################################
 ## Compare sequences and output results ##
 ##########################################
-n_acids_interval = range(comp_start, comp_end)
+def find_sim_seq(s1, s2, interval):
+    ind_matches = []
+    all_matches = []
 
-ind_hit = []  # Empty for collecting indices of hits
-acid_hit = []  # Empty for later collecting acid changes/similarities
-all_hits = []  # Empty for collecting all hits
+    for i in interval:
+        if s1[i] == s2[i]:  # Compare for match
+            ind_matches.append(i)  # Append position to list with all matches
+            match = [s1[i], s2[i]]
+            position = [match[0][0], str(i), match[1][0]]   # Combine code with position
+            match = ''.join(position[:])    # Get rid of whitespace for correct code displaying
+            all_matches.append(match)   # Append to list with matching code + position
 
-print("Hits found at this positions in the sequence:")
-for i in n_acids_interval:
-    if seq1_acids_merged[i] == seq2_acids_merged[i]:
-        ind_hit.append(i)
-        acid_hit = [seq1_acids_merged[i], seq2_acids_merged[i]]  # Collect acids
+    amount_hits = len(ind_matches)  # Total amount of matches
+    return amount_hits, all_matches
 
-        pos = [acid_hit[0][0], str(i), acid_hit[1][0]]  # Combine acid locations with position
 
-        hit = ''.join(pos[:])  # Merge hit elements
-        all_hits.append(hit)  # Collect all hits
-        print(hit)
+if comp_mode == 1: # Find sequence matches
+    print("Search for matching sequences initiated.\nGenerating results...")
+    X = find_sim_seq(seq1_acids_merged, seq2_acids_merged, n_acids_interval)
+    print("\nMatches found in the sequence interval:\n", X[1])
+    print("\nTotal amount of matches:", X[0])
 
-n_hits = len(ind_hit)  # Total amount of found hits
-print("\nTotal amount of hits:", n_hits)
+"""
+elif comp_mode == 2:    # Find mutations
+    ## Coming next...
+else: # Find sequence
+    ## Coming next...
+"""
