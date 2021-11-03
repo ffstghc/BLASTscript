@@ -1,12 +1,12 @@
 #########################################################################################
 ## Extract sequence from random two samples created by https://web.expasy.org/randseq/ ##
 #########################################################################################
-seq1 = "SEQUENCE 200 AA; 22287 MW; CA76AFAD7E9B646F CRC64; RNAAILMLVP FSFGVKDLRA ILGELLRRNI YQKSTEFFHN PKVRMHLRDK PLGMGSHLQD PYGRAGSKDI QIAVISELEV RATICVETFF WIVENAGVLQ DYIKSDAENP DRSEHSVSWK LEATSANGKV AFYRANLPKP YVGTIIGLGQ DGELTSKRAE CNDLQDTASQ KGPEPGLVEA VCFDLIKYSA MVTTTQMLTH"
-seq2 = "SEQUENCE 100 AA; 11150 MW; 86E46D87BAFAF057 CRC64; AKYLKNHLET ILSTDRPPFY LNKRGLEPKV SDRIQMEEGV DIAASQSLNQ FASQMNLAYK TVCDLRSVRV FATKIEVILV WGEPRPLDGG AFGITGAHES DYIKSDAENP DRSEHSVSWK LEATSANGKV AFYRANLPKP PLGMGSHLQD PYGRAGSKDI QIAVISELEV RATICVETFF WIVENAGVLQ MVTTTQMLTH"
+seq1 = "SEQUENCE 200 AA; 22287 MW; CA76AFAD7E9B646F CRC64; RNYAILMLVP FSFGVKDLRA ILGELLRRNI YQKSTEFFHN PKVRMHLRDK PLGMGSHLQD PYGRAGSKDI QIAVISELEV RATICVETFF WIVENAGVLQ DYIKSDAENP DRSEHSVSWK LEATSANGKV AFYRANLPKP YVGTIIGLGQ DGELTSKRAE CNDLQDTASQ KGPEPGLVEA VCFDLIKYSA MVTTTQMLTH"
+seq2 = "SEQUENCE 100 AA; 11150 MW; 86E46D87BAFAF057 CRC64; RKYLKLHLET ILSTDRPPFY LNKRGLEPKV SDRIQMEEGV DIAASQSLNQ FASQMNLAYK TVCDLRSVRV FATKIEVILV WGEPRPLDGG AFGITGAHES DYIKSDAENP DRSEHSVSWK LEATSANGKV AFYRANLPKP PLGMGSHLQD PYGRAGSKDI QIAVISELEV RATICVETFF WIVENAGVLQ MVTTTQMLTH"
 
 posSeq = 7  # Position in list where the acids start
 
-# Split string into parts (list) to extract aminoacids starting at "posSeq"
+# Split string into parts (list) to extract amino acids starting at "posSeq"
 seq1_acids = seq1.split()[posSeq:]
 seq2_acids = seq2.split()[posSeq:]
 
@@ -24,17 +24,13 @@ comp_start = int(input())
 print("Input ending position for comparison:")
 comp_end = int(input())
 print("Start set to:", comp_start, "\n" "End set to:", comp_end)
-n_acids_interval = range(comp_start, comp_end)  # Interval for search
-
-###########################
-## Input comparison mode ##
-###########################
+n_acids_interval = range(comp_start - 1, comp_end - 1)  # Interval for search
 print("\nAvailable comparison modes:\n",
       "(1) Search for matching nucleotides / amino acids\n",
       "(2) Search for mutated nucleosides / amino acids\n",
       "(3) Search for specific nucleoside / amino acid sequence\n",
       "Input 1,2 or 3:")
-comp_mode = int(input())
+comp_mode = int(input())  # Input comparison mode 1, 2 or 3
 
 
 ##########################################
@@ -48,7 +44,7 @@ def find_sim_seq(s1, s2, interval):
         if s1[i] == s2[i]:  # Compare for match
             ind_matches.append(i)  # Append position to list with all matches
             match = [s1[i], s2[i]]
-            position = [match[0][0], str(i), match[1][0]]  # Combine code with position
+            position = [match[0][0], str(i + 1), match[1][0]]  # Combine code with position
             match = ''.join(position[:])  # Get rid of whitespace for correct code displaying
             all_matches.append(match)  # Append to list with matching code + position
 
@@ -64,7 +60,7 @@ def find_mut_seq(s1, s2, interval):
         if s1[i] != s2[i]:  # Compare for mutations
             ind_mutations.append(i)  # Append position to list with all mutations
             match = [s1[i], s2[i]]
-            position = [match[0][0], str(i), match[1][0]]  # Combine code with position
+            position = [match[0][0], str(i + 1), match[1][0]]  # Combine code with position
             match = ''.join(position[:])  # Get rid of whitespace for correct code displaying
             all_mutations.append(match)  # Append to list with mutated code + position
 
@@ -84,7 +80,15 @@ elif comp_mode == 2:  # Find mutations
     print("\nMutations found in the sequence interval:\n", X[1])
     print("\nTotal amount of mutations:", X[0])
 
-""""  
-else: # Find sequence
-    ## Coming next...
-"""
+elif comp_mode == 3:  # Find defined sequence
+    print("Input defined sequence to search for in 'seq1'.\nE.g.: 'LN' or 'ATC'")
+    seq_input = input()  # Input sequence string
+    print("Search for defined sequence initiated.\nGenerating results...")
+
+    if seq1.find(seq_input, comp_start, comp_end) != -1:  # Search for defined sequence
+        print("\nPositive,", "'", seq_input, "'", "found in sequence!")
+    else:
+        print("\nNegative,", "'", seq_input, "'", "NOT found in sequence!")
+
+else:
+    print("Wrong input. Restart script and type: '1', '2' or '3'")
