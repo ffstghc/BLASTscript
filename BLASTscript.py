@@ -26,7 +26,6 @@ comp_end = int(input())
 print("Start set to:", comp_start, "\n" "End set to:", comp_end)
 n_acids_interval = range(comp_start, comp_end)  # Interval for search
 
-
 ###########################
 ## Input comparison mode ##
 ###########################
@@ -49,23 +48,43 @@ def find_sim_seq(s1, s2, interval):
         if s1[i] == s2[i]:  # Compare for match
             ind_matches.append(i)  # Append position to list with all matches
             match = [s1[i], s2[i]]
-            position = [match[0][0], str(i), match[1][0]]   # Combine code with position
-            match = ''.join(position[:])    # Get rid of whitespace for correct code displaying
-            all_matches.append(match)   # Append to list with matching code + position
+            position = [match[0][0], str(i), match[1][0]]  # Combine code with position
+            match = ''.join(position[:])  # Get rid of whitespace for correct code displaying
+            all_matches.append(match)  # Append to list with matching code + position
 
-    amount_hits = len(ind_matches)  # Total amount of matches
-    return amount_hits, all_matches
+    amount_matches = len(ind_matches)  # Total amount of matches
+    return amount_matches, all_matches
 
 
-if comp_mode == 1: # Find sequence matches
+def find_mut_seq(s1, s2, interval):
+    ind_mutations = []
+    all_mutations = []
+
+    for i in interval:
+        if s1[i] != s2[i]:  # Compare for mutations
+            ind_mutations.append(i)  # Append position to list with all mutations
+            match = [s1[i], s2[i]]
+            position = [match[0][0], str(i), match[1][0]]  # Combine code with position
+            match = ''.join(position[:])  # Get rid of whitespace for correct code displaying
+            all_mutations.append(match)  # Append to list with mutated code + position
+
+    amount_mutations = len(ind_mutations)  # Total amount of mutations
+    return amount_mutations, all_mutations
+
+
+if comp_mode == 1:  # Find sequence matches
     print("Search for matching sequences initiated.\nGenerating results...")
     X = find_sim_seq(seq1_acids_merged, seq2_acids_merged, n_acids_interval)
     print("\nMatches found in the sequence interval:\n", X[1])
     print("\nTotal amount of matches:", X[0])
 
-"""
-elif comp_mode == 2:    # Find mutations
-    ## Coming next...
+elif comp_mode == 2:  # Find mutations
+    print("Search for mutated sequences initiated.\nGenerating results...")
+    X = find_mut_seq(seq1_acids_merged, seq2_acids_merged, n_acids_interval)
+    print("\nMutations found in the sequence interval:\n", X[1])
+    print("\nTotal amount of mutations:", X[0])
+
+""""  
 else: # Find sequence
     ## Coming next...
 """
